@@ -1,0 +1,23 @@
+.app {
+  font-family: sans-serif;
+  text-align: center;
+}
+
+.calculator {
+  width: 650px;
+  height: 800px;
+  border: 1px solid red;
+}
+
+.buttonPad {
+  height: 800px;
+  width: 650px;
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.button {
+  height: 100px;
+  width: 100px;
+  border: 1px solid black;
+}
