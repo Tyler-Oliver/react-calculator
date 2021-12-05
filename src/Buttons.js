@@ -6,6 +6,15 @@ export default class Buttons extends Component {
       <div className="buttons">
         <div className="my-buttons">
           <div className="number-buttons">
+            <button id="power" onClick={this.props.power}>
+              Power
+            </button>
+            <button value="(" id="two" onClick={this.props.button}>
+              (
+            </button>
+            <button value=")" id="three" onClick={this.props.button}>
+              )
+            </button>
             <button value="1" id="one" onClick={this.props.button}>
               1
             </button>
@@ -44,7 +53,9 @@ export default class Buttons extends Component {
             </button>
           </div>
           <div className="functional-buttons">
-            <button id="clear">CLEAR</button>
+            <button id="clear" onClick={this.props.handleClear}>
+              CLEAR
+            </button>
             <button id="backspace" onClick={this.props.handleBackspace}>
               Backspace
             </button>

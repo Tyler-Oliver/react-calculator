@@ -4,9 +4,26 @@
   box-sizing: border-box;
 }
 
+body,
+html {
+  height: 100%;
+  width: 100%;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 5px solid red;
+  height: 100%;
+  width: 100%;
+}
+
 .app {
   font-family: sans-serif;
   text-align: center;
+  margin: 0 auto;
 }
 
 button {
@@ -19,30 +36,48 @@ button {
   flex-direction: column;
   height: 500px;
   width: 400px;
-  margin: 75px auto;
+  margin: 0 auto;
+  padding: 5px;
+  background-color: beige;
   border: 1px solid red;
+  border-radius: 5px;
 
-  .my-expression {
-    height: 50px;
-    border: 1px solid green;
-  }
+  #results-component {
+    margin-bottom: 20px;
+  
+    .my-expression {
+      text-align: right;
+      margin-bottom: 5px;
+      padding: 5px;
+      height: 50px;
+      background-color: white;
+      border: 1px solid green;
+      border-radius: 5px;
+    }
 
-  .my-answer {
-    height: 50px;
-    border: 1px solid purple;
+    .my-answer {
+      text-align: right;
+      height: 50px;
+      padding: 5px;
+      background-color: white;
+      border: 1px solid purple;
+      border-radius: 5px;
+    }
   }
 
   .buttons {
     display: flex;
     justify-content: space-around;
     height: 80%;
+    padding: 5px 0;
     margin-top: 5px;
-    border-top: 1px solid black;
+    border: 1px solid black;
+    border-radius: 5px;
   
     .my-buttons {
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      justify-content: space-around;
       height: 100%;
       width: 70%;
     
@@ -55,7 +90,7 @@ button {
         
         button {
           width: 30%;
-          height: 23%;
+          height: 18%;
         }
         }
     

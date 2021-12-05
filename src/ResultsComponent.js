@@ -5,10 +5,10 @@ export default class ResultsComponent extends Component {
     return (
       <div id="results-component">
         <div className="my-expression">
-          <p>result: {this.props.result}</p>
+          <p>{this.props.result}</p>
         </div>
         <div className="my-answer">
-          <p>answer: {this.props.answer}</p>
+          <p>{this.props.answer}</p>
         </div>
       </div>
     );
