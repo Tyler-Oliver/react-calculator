@@ -5,7 +5,7 @@ export default class ResultsComponent extends Component {
     return (
       <div id="results-component">
         <div className="my-expression">
-          <p>{this.props.result}</p>
+          <p>{this.props.formula}</p>
         </div>
         <div className="my-answer">
           <p>{this.props.answer}</p>

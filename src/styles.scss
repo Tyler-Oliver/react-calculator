@@ -68,7 +68,7 @@ button {
   .buttons {
     display: flex;
     justify-content: space-around;
-    height: 80%;
+    height: 70%;
     padding: 5px 0;
     margin-top: 5px;
     border: 1px solid black;
@@ -80,13 +80,14 @@ button {
       justify-content: space-around;
       height: 100%;
       width: 70%;
+      border: 1px solid black;
     
       .number-buttons {
         display: flex;
         flex-flow: row wrap;
         justify-content: space-around;
         align-content: space-around;
-        height: 80%;
+        height: 70%;
         
         button {
           width: 30%;
@@ -96,13 +97,16 @@ button {
     
       .functional-buttons {
         display: flex;
+        flex-flow: row wrap;
         justify-content: space-around;
+        align-content: space-between;
         padding: 5px;
-        height: 20%;
+        height: 30%;
+        border: 1px solid red;
 
         button {
           width: 45%;
-          height: 100%;
+          height: 50%;
         }
       }
     }
