@@ -8,49 +8,84 @@ export default class App extends Component {
     super(props);
     this.state = {
       power: true,
-      currentButton: "",
-      result: "",
-      answer: ""
+      currentVal: "",
+      formula: "",
+      answer: "",
+      decimalPlaces: 2
     };
-    this.handleButton = this.handleButton.bind(this);
+    this.handleNumber = this.handleNumber.bind(this);
     this.handleCalc = this.handleCalc.bind(this);
     this.handleOperator = this.handleOperator.bind(this);
     this.handleBackspace = this.handleBackspace.bind(this);
     this.handleClear = this.handleClear.bind(this);
     this.handlePower = this.handlePower.bind(this);
+    this.handleDecimal = this.handleDecimal.bind(this);
+    this.handleDecimalPlaces = this.handleDecimalPlaces.bind(this);
   }
 
   handlePower() {
     if (this.state.power === false) {
       this.setState({
         power: true,
-        currentButton: "",
-        result: "",
+        currentVal: "",
+        formula: "",
         answer: ""
       });
     } else {
       this.setState({
         power: false,
-        result: "POWER OFF",
+        formula: "POWER OFF",
         answer: "POWER OFF"
       });
     }
   }
 
+  handleDecimal() {
+    let myStr = this.state.currentVal; //Create a new string when first input is "."
+    if (this.state.currentVal === "" || this.state.currentVal === "ERROR") {
+      this.setState({
+        currentVal: "0.",
+        formula: this.state.formula + "0."
+      });
+    } else if (/[.]/.test(myStr) === false) {
+      this.setState({
+        currentVal: this.state.currentVal + ".",
+        formula: this.state.formula + "."
+      });
+    }
+  }
+
+  handleDecimalPlaces(e) {
+    let value = e.target.value;
+    if (this.state.power === true) {
+      if (value === "decimal-less" && this.state.decimalPlaces > 0) {
+        this.setState({
+          decimalPlaces: this.state.decimalPlaces - 1
+        });
+      } else if (value === "decimal-more" && this.state.decimalPlaces < 6) {
+        this.setState({
+          decimalPlaces: this.state.decimalPlaces + 1
+        });
+      }
+    }
+  }
+
   handleCalc() {
-    let myResult = this.state.result.replace(/[^-()\d/*+.]/g, "");
+    let myResult = this.state.formula.replace(/[^-()\d/*+.]/g, "");
+    let newString = myResult.replace(/^[0]/, "");
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    /*I added the newString and replaced myResult with it when 
+    calling the string but it did not work*/
 
     let isValid = (str) => {
       const stack = [];
       let noParStr = str.replace(/[()]/g, ""); //Create a string with no parenthesis
-      let myStr = str.replace(/^[.]/, "0."); //Create a new string when first input is "."
       console.log(str);
-      console.log(myStr);
       if (
         /^[(\d.]/.test(noParStr) && //Ensure string doesnt start with operator
         /[^-/*+]$/.test(noParStr) && //Ensure string doesnt end with operator
-        noParStr !== "" && //Ensure no empty parenthesis
-        /(?<=\d)./.test(myStr) //Ensure a demical only comes after a number
+        /[-*/+]{2,}/.test(str) === false &&
+        noParStr !== "" //Ensure no empty parenthesis
       ) {
         //Ensure string doesnt start with an operator
         let newStr = str.replace(/[-\d/*+.]/g, ""); //Sanitize string leaving only parenthesis
@@ -70,22 +105,27 @@ export default class App extends Component {
         }
       } else {
         console.log("shit");
-        console.log(/(?<=\d)./.test(myStr));
+        console.log(/^[(\d.]/.test(noParStr));
+        console.log(/[^-/*+]$/.test(noParStr));
+        console.log(/[-*/+]{2,}/.test(str) === false);
+        console.log(noParStr !== "");
         return false;
       }
     };
 
     // Since I am using eval() I want to only accept certain characters in the string
     if (this.state.power === true) {
-      if (isValid(myResult)) {
+      if (isValid(newString)) {
         this.setState({
           // I am using eval() since the string is safe and trusted
-          result: "",
-          answer: eval(myResult).toFixed(2)
+          currentVal: "",
+          formula: "",
+          answer: eval(myResult).toFixed(this.state.decimalPlaces)
         });
       } else {
         this.setState({
-          result: "ERROR",
+          currentVal: "ERROR",
+          formula: "ERROR",
           answer: "ERROR"
         });
       }
@@ -95,26 +135,26 @@ export default class App extends Component {
   handleClear() {
     if (this.state.power === true) {
       this.setState({
-        currentButton: "",
-        result: "",
+        currentVal: "",
+        formula: "",
         answer: ""
       });
     }
   }
 
-  handleButton(e) {
+  handleNumber(e) {
     if (this.state.power === true) {
       let value = e.target.value;
-      if (this.state.result === "ERROR") {
+      if (this.state.formula === "ERROR") {
         this.setState({
-          currentButton: value,
-          result: value,
+          currentVal: value,
+          formula: value,
           answer: ""
         });
       } else {
         this.setState({
-          currentButton: value,
-          result: this.state.result + value
+          currentVal: this.state.currentVal + value,
+          formula: this.state.formula + value
         });
       }
     }
@@ -123,15 +163,15 @@ export default class App extends Component {
   handleOperator(e) {
     let value = e.target.value;
     if (this.state.power === true) {
-      if (this.state.result !== "") {
+      if (this.state.formula !== "") {
         //Same as handleButton
         this.setState({
-          currentButton: value,
-          result: this.state.result + value
+          currentVal: "",
+          formula: this.state.formula + value
         });
       } else {
         this.setState({
-          result: this.state.answer + value
+          formula: this.state.answer + value
         });
       }
     }
@@ -139,31 +179,36 @@ export default class App extends Component {
 
   handleBackspace() {
     if (this.state.power === true) {
-      let myStr = this.state.result.slice(0, -1);
+      let myStr = this.state.formula.slice(0, -1);
       this.setState({
-        result: myStr
+        formula: myStr
       });
     }
   }
 
   render() {
+    console.log("currentVal = " + this.state.currentVal);
     return (
       <div className="app">
         <div className="calculator">
           <ResultsComponent
-            currentButton={this.state.currentButton}
-            result={this.state.result}
+            currentVal={this.state.currentVal}
+            formula={this.state.formula}
             answer={this.state.answer}
           />
+          <p>Decimal Places in answer: {this.state.decimalPlaces}</p>
           <Buttons
-            power={this.handlePower}
-            button={this.handleButton}
-            calculate={this.handleCalc}
+            handleDecimalPlaces={this.handleDecimalPlaces}
+            handleDecimal={this.handleDecimal}
+            handlePower={this.handlePower}
+            handleNumber={this.handleNumber}
+            handleCalc={this.handleCalc}
             handleOperator={this.handleOperator}
             handleBackspace={this.handleBackspace}
             handleClear={this.handleClear}
           />
         </div>
+        <footer>Created by Tyler Oliver</footer>
       </div>
     );
   }
