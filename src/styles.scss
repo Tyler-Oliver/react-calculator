@@ -80,33 +80,29 @@ button {
       justify-content: space-around;
       height: 100%;
       width: 70%;
-      border: 1px solid black;
     
       .number-buttons {
         display: flex;
         flex-flow: row wrap;
         justify-content: space-around;
         align-content: space-around;
-        height: 70%;
+        height: 80%;
         
         button {
           width: 30%;
-          height: 18%;
+          height: 15%;
         }
         }
     
       .functional-buttons {
         display: flex;
-        flex-flow: row wrap;
         justify-content: space-around;
-        align-content: space-between;
         padding: 5px;
-        height: 30%;
-        border: 1px solid red;
+        height: 20%;
 
         button {
           width: 45%;
-          height: 50%;
+          height: 90%;
         }
       }
     }

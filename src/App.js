@@ -11,6 +11,7 @@ export default class App extends Component {
       currentVal: "",
       formula: "",
       answer: "",
+      trueAnswer: 0,
       decimalPlaces: 2
     };
     this.handleNumber = this.handleNumber.bind(this);
@@ -21,6 +22,7 @@ export default class App extends Component {
     this.handlePower = this.handlePower.bind(this);
     this.handleDecimal = this.handleDecimal.bind(this);
     this.handleDecimalPlaces = this.handleDecimalPlaces.bind(this);
+    this.handleSign = this.handleSign.bind(this);
   }
 
   handlePower() {
@@ -40,18 +42,35 @@ export default class App extends Component {
     }
   }
 
+  handleSign() {
+    if (this.state.currentVal === "") {
+      this.setState({
+        currentVal: this.state.currentVal + "(-1)*",
+        formula: this.state.formula + (this.state.currentVal + "(-1)*")
+      });
+    }
+  }
+
   handleDecimal() {
     let myStr = this.state.currentVal; //Create a new string when first input is "."
-    if (this.state.currentVal === "" || this.state.currentVal === "ERROR") {
-      this.setState({
-        currentVal: "0.",
-        formula: this.state.formula + "0."
-      });
-    } else if (/[.]/.test(myStr) === false) {
-      this.setState({
-        currentVal: this.state.currentVal + ".",
-        formula: this.state.formula + "."
-      });
+    if (this.state.power === true) {
+      if (this.state.currentVal === "") {
+        this.setState({
+          currentVal: "0.",
+          formula: this.state.formula + "0."
+        });
+      } else if (this.state.currentVal === "ERROR") {
+        this.setState({
+          currentVal: "0.",
+          formula: "0.",
+          answer: ""
+        });
+      } else if (/[.]/.test(myStr) === false) {
+        this.setState({
+          currentVal: this.state.currentVal + ".",
+          formula: this.state.formula + "."
+        });
+      }
     }
   }
 
@@ -60,11 +79,17 @@ export default class App extends Component {
     if (this.state.power === true) {
       if (value === "decimal-less" && this.state.decimalPlaces > 0) {
         this.setState({
-          decimalPlaces: this.state.decimalPlaces - 1
+          decimalPlaces: this.state.decimalPlaces - 1,
+          answer: Number(this.state.trueAnswer).toFixed(
+            this.state.decimalPlaces - 1
+          )
         });
       } else if (value === "decimal-more" && this.state.decimalPlaces < 6) {
         this.setState({
-          decimalPlaces: this.state.decimalPlaces + 1
+          decimalPlaces: this.state.decimalPlaces + 1,
+          answer: Number(this.state.trueAnswer).toFixed(
+            this.state.decimalPlaces + 1
+          )
         });
       }
     }
@@ -72,19 +97,15 @@ export default class App extends Component {
 
   handleCalc() {
     let myResult = this.state.formula.replace(/[^-()\d/*+.]/g, "");
-    let newString = myResult.replace(/^[0]/, "");
-    //!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    /*I added the newString and replaced myResult with it when 
-    calling the string but it did not work*/
 
     let isValid = (str) => {
       const stack = [];
       let noParStr = str.replace(/[()]/g, ""); //Create a string with no parenthesis
-      console.log(str);
       if (
         /^[(\d.]/.test(noParStr) && //Ensure string doesnt start with operator
         /[^-/*+]$/.test(noParStr) && //Ensure string doesnt end with operator
         /[-*/+]{2,}/.test(str) === false &&
+        /^0{1}[0-9]/.test(this.state.currentVal) === false &&
         noParStr !== "" //Ensure no empty parenthesis
       ) {
         //Ensure string doesnt start with an operator
@@ -97,7 +118,6 @@ export default class App extends Component {
             stack.pop();
           } else return false;
         }
-        console.log(stack);
         if (stack.length === 0) {
           return true;
         } else {
@@ -108,6 +128,7 @@ export default class App extends Component {
         console.log(/^[(\d.]/.test(noParStr));
         console.log(/[^-/*+]$/.test(noParStr));
         console.log(/[-*/+]{2,}/.test(str) === false);
+        console.log(/^0{1}[0-9]/.test(this.state.currentVal) === false);
         console.log(noParStr !== "");
         return false;
       }
@@ -115,12 +136,13 @@ export default class App extends Component {
 
     // Since I am using eval() I want to only accept certain characters in the string
     if (this.state.power === true) {
-      if (isValid(newString)) {
+      if (isValid(myResult)) {
         this.setState({
           // I am using eval() since the string is safe and trusted
           currentVal: "",
           formula: "",
-          answer: eval(myResult).toFixed(this.state.decimalPlaces)
+          answer: eval(myResult).toFixed(this.state.decimalPlaces),
+          trueAnswer: eval(myResult).toFixed(6)
         });
       } else {
         this.setState({
@@ -163,8 +185,12 @@ export default class App extends Component {
   handleOperator(e) {
     let value = e.target.value;
     if (this.state.power === true) {
-      if (this.state.formula !== "") {
-        //Same as handleButton
+      if (this.state.formula === "ERROR") {
+        this.setState({
+          formula: "ERROR",
+          answer: "ERROR"
+        });
+      } else if (this.state.formula !== "") {
         this.setState({
           currentVal: "",
           formula: this.state.formula + value
@@ -187,7 +213,6 @@ export default class App extends Component {
   }
 
   render() {
-    console.log("currentVal = " + this.state.currentVal);
     return (
       <div className="app">
         <div className="calculator">
@@ -206,6 +231,7 @@ export default class App extends Component {
             handleOperator={this.handleOperator}
             handleBackspace={this.handleBackspace}
             handleClear={this.handleClear}
+            handleSign={this.handleSign}
           />
         </div>
         <footer>Created by Tyler Oliver</footer>
