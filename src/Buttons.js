@@ -55,8 +55,6 @@ export default class Buttons extends Component {
             <button value="." id="decimal" onClick={this.props.handleDecimal}>
               .
             </button>
-          </div>
-          <div className="functional-buttons">
             <button
               value="decimal-less"
               id="decimal-less"
@@ -71,6 +69,11 @@ export default class Buttons extends Component {
             >
               Decimal More
             </button>
+            <button className="sign-change" onClick={this.props.handleSign}>
+              (-/+)
+            </button>
+          </div>
+          <div className="functional-buttons">
             <button id="clear" onClick={this.props.handleClear}>
               CLEAR
             </button>
