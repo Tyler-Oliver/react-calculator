@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 
-export default class Buttons extends Component {
+export default class ButtonsComponent extends Component {
   render() {
     return (
-      <div className="buttons">
+      <div id="buttons-component">
         <div className="my-buttons">
           <div className="number-buttons">
             <button id="power" onClick={this.props.handlePower}>
@@ -82,7 +82,7 @@ export default class Buttons extends Component {
             </button>
           </div>
         </div>
-        <div className="arithmetic-buttons">
+        <div className="operator-buttons">
           <button value="/" id="divide" onClick={this.props.handleOperator}>
             /
           </button>
