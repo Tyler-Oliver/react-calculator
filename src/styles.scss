@@ -1,3 +1,5 @@
+
+
 $base-color-1: #DCDCEF;
 $base-color-2: #5B5BB8;
 $base-color-3: #C4A24A;
@@ -54,22 +56,29 @@ footer {
   width: 400px;
   margin: 0 auto;
   padding: 5px;
+  font-family: "digital-7";
   background-color: $base-color-3;
-  border: 1px solid black;
+  border: 1px solid $base-color-5;
   border-radius: 5px;
 
   #results-component {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     height: 30%;
     margin-bottom: 5px;
+    border: 1px solid $base-color-5;
+    border-radius: 5px;
+    padding: 5px;
+    background-color: $base-color-4;
   
     .my-formula {
       text-align: right;
-      margin: 5px 0;
       padding: 5px;
       height: 40%;
       background-color: $base-color-1;
       color: $base-color-5;
-      border: 1px solid black;
+      border: 1px solid $base-color-5;
       border-radius: 5px;
     }
 
@@ -80,14 +89,21 @@ footer {
       margin: 5px 0;
       background-color: $base-color-1;
       color: $base-color-5;
-      border: 1px solid black;
+      border: 1px solid $base-color-5;
       border-radius: 5px;
     }
 
     .my-div {
-      height: 20%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: left;
       margin: 5px 0;
+      padding: 5px;
+      background-color: $base-color-1;
       color: $base-color-5;
+      border-radius: 5px;
+      border: 1px solid $base-color-5;
     }
   }
 
@@ -97,7 +113,8 @@ footer {
     height: 70%;
     padding: 5px 0;
     margin-top: 5px;
-    border: 1px solid black;
+    background-color: $base-color-4;
+    border: 1px solid $base-color-5;
     border-radius: 5px;
   
     .my-buttons {

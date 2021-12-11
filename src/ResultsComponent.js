@@ -11,7 +11,7 @@ export default class ResultsComponent extends Component {
           <p>{this.props.answer}</p>
         </div>
         <div className="my-div">
-          <p>Decimal Places in answer: {this.props.decimalPlaces}</p>
+          <p>Decimal Places: {this.props.decimalPlaces}</p>
         </div>
       </div>
     );
