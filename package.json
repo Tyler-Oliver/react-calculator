@@ -2,12 +2,16 @@
   "name": "react",
   "version": "1.0.0",
   "description": "React Calculator",
-  "keywords": ["react", "calculator"],
+  "keywords": [
+    "react",
+    "calculator"
+  ],
   "main": "src/index.js",
   "dependencies": {
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "react-scripts": "4.0.0"
+    "react-scripts": "4.0.0",
+    "sass": "1.45.0"
   },
   "devDependencies": {
     "@babel/runtime": "7.13.8",
@@ -19,5 +23,10 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
-  "browserslist": [">0.2%", "not dead", "not ie <= 11", "not op_mini all"]
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }
