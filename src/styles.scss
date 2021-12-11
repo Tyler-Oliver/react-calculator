@@ -1,4 +1,11 @@
+$base-color-1: #DCDCEF;
+$base-color-2: #5B5BB8;
+$base-color-3: #C4A24A;
+$base-color-4: #90783C;
+$base-color-5: #2A2313;
+
 * {
+  font-size: 16px;
   padding: 0;
   margin: 0;
   box-sizing: border-box;
@@ -6,66 +13,85 @@
 
 body,
 html {
-  height: 100%;
-  width: 100%;
-}
-
-#root {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
-  border: 5px solid red;
-  height: 100%;
+  min-height: 100vh;
   width: 100%;
 }
 
 .app {
   font-family: sans-serif;
+  font-size: 16px;
   text-align: center;
+  height: 100%;
   margin: 0 auto;
 }
 
 button {
   cursor: pointer;
   border-radius: 5px;
+  background-color: $base-color-1;
+  color: $base-color-5;
+}
+
+button:active {
+  background-color: $base-color-2;
+  color: $base-color-1;
+}
+
+footer {
+  position: fixed;
+  bottom: 15px;
+  left: 0;
+  right: 0;
 }
 
 .calculator {
   display: flex;
   flex-direction: column;
-  height: 500px;
+  height: 600px;
   width: 400px;
   margin: 0 auto;
   padding: 5px;
-  background-color: beige;
-  border: 1px solid red;
+  background-color: $base-color-3;
+  border: 1px solid black;
   border-radius: 5px;
 
   #results-component {
-    margin-bottom: 20px;
+    height: 30%;
+    margin-bottom: 5px;
   
-    .my-expression {
+    .my-formula {
       text-align: right;
-      margin-bottom: 5px;
+      margin: 5px 0;
       padding: 5px;
-      height: 50px;
-      background-color: white;
-      border: 1px solid green;
+      height: 40%;
+      background-color: $base-color-1;
+      color: $base-color-5;
+      border: 1px solid black;
       border-radius: 5px;
     }
 
     .my-answer {
       text-align: right;
-      height: 50px;
+      height: 40%;
       padding: 5px;
-      background-color: white;
-      border: 1px solid purple;
+      margin: 5px 0;
+      background-color: $base-color-1;
+      color: $base-color-5;
+      border: 1px solid black;
       border-radius: 5px;
+    }
+
+    .my-div {
+      height: 20%;
+      margin: 5px 0;
+      color: $base-color-5;
     }
   }
 
-  .buttons {
+  #buttons-component {
     display: flex;
     justify-content: space-around;
     height: 70%;
@@ -107,7 +133,7 @@ button {
       }
     }
   
-    .arithmetic-buttons {
+    .operator-buttons {
       display: flex;
       flex-direction: column;
       justify-content: space-around;
@@ -119,6 +145,28 @@ button {
         height: 18%;
       }
     }
+  }
+}
+
+@media (max-width: 450px) {
+  * {
+    font-size: 14px;
+  }
+
+  .calculator {
+    height: 600px;
+    width: 350px;
+  }
+}
+
+@media (max-width: 350px) {
+  * {
+    font-size: 10px;
+  }
+
+  .calculator {
+    height: 500px;
+    width: 300px;
   }
 }
 

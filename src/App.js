@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Buttons from "./Buttons.js";
+import ButtonsComponent from "./ButtonsComponent.js";
 import ResultsComponent from "./ResultsComponent.js";
 import "./styles.scss";
 
@@ -14,6 +14,7 @@ export default class App extends Component {
       trueAnswer: 0,
       decimalPlaces: 2
     };
+
     this.handleNumber = this.handleNumber.bind(this);
     this.handleCalc = this.handleCalc.bind(this);
     this.handleOperator = this.handleOperator.bind(this);
@@ -43,11 +44,33 @@ export default class App extends Component {
   }
 
   handleSign() {
-    if (this.state.currentVal === "") {
-      this.setState({
-        currentVal: this.state.currentVal + "(-1)*",
-        formula: this.state.formula + (this.state.currentVal + "(-1)*")
-      });
+    if (this.state.power === true) {
+      if (this.state.formula === "" && this.state.answer > 0) {
+        this.setState({
+          formula: "(-" + this.state.answer,
+          answer: ""
+        });
+      } else if (this.state.formula === "" && this.state.answer < 0) {
+        this.setState({
+          formula: this.state.answer.replace("-", ""),
+          answer: ""
+        });
+      } else if (/^[(][-]/.test(this.state.currentVal)) {
+        this.setState({
+          currentVal: this.state.currentVal.replace(/^[(][-]/, ""),
+          formula:
+            this.state.formula.replace(this.state.currentVal, "") +
+            this.state.currentVal.replace(/^[(][-]/, "")
+        });
+      } else {
+        this.setState({
+          currentVal: "(-" + this.state.currentVal,
+          formula:
+            this.state.formula.replace(this.state.currentVal, "") +
+            "(-" +
+            this.state.currentVal
+        });
+      }
     }
   }
 
@@ -102,7 +125,8 @@ export default class App extends Component {
       const stack = [];
       let noParStr = str.replace(/[()]/g, ""); //Create a string with no parenthesis
       if (
-        /^[(\d.]/.test(noParStr) && //Ensure string doesnt start with operator
+        /^[^/*+]/.test(str) && //Ensure string doesnt start with operator
+        /[)][\d]/.test(str) === false &&
         /[^-/*+]$/.test(noParStr) && //Ensure string doesnt end with operator
         /[-*/+]{2,}/.test(str) === false &&
         /^0{1}[0-9]/.test(this.state.currentVal) === false &&
@@ -125,7 +149,8 @@ export default class App extends Component {
         }
       } else {
         console.log("shit");
-        console.log(/^[(\d.]/.test(noParStr));
+        console.log(/^[^/*+]/.test(str));
+        console.log(/[)][\d]/.test(str) === false);
         console.log(/[^-/*+]$/.test(noParStr));
         console.log(/[-*/+]{2,}/.test(str) === false);
         console.log(/^0{1}[0-9]/.test(this.state.currentVal) === false);
@@ -220,9 +245,9 @@ export default class App extends Component {
             currentVal={this.state.currentVal}
             formula={this.state.formula}
             answer={this.state.answer}
+            decimalPlaces={this.state.decimalPlaces}
           />
-          <p>Decimal Places in answer: {this.state.decimalPlaces}</p>
-          <Buttons
+          <ButtonsComponent
             handleDecimalPlaces={this.handleDecimalPlaces}
             handleDecimal={this.handleDecimal}
             handlePower={this.handlePower}
