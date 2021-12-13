@@ -258,8 +258,8 @@ export default class App extends Component {
             handleClear={this.handleClear}
             handleSign={this.handleSign}
           />
+          <p id="signature">Created by Tyler Oliver</p>
         </div>
-        <footer>Created by Tyler Oliver</footer>
       </div>
     );
   }
