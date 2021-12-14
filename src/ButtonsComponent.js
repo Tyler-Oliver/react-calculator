@@ -9,21 +9,21 @@ export default class ButtonsComponent extends Component {
           className="danger-button top-left-button"
           onClick={this.props.handlePower}
         >
-          Power
+          POWER
         </button>
         <button
           id="clear"
           className="danger-button"
           onClick={this.props.handleClear}
         >
-          CLEAR
+          AC
         </button>
         <button
           id="backspace"
           className="danger-button"
           onClick={this.props.handleBackspace}
         >
-          Backspace
+          CE
         </button>
         <button
           className="sign-change"
@@ -54,7 +54,7 @@ export default class ButtonsComponent extends Component {
           className="functional-button"
           onClick={this.props.handleDecimalPlaces}
         >
-          Decimal Less
+          {"\u2190"} .00
         </button>
         <button
           value="decimal-more"
@@ -62,7 +62,7 @@ export default class ButtonsComponent extends Component {
           className="functional-button"
           onClick={this.props.handleDecimalPlaces}
         >
-          Decimal More
+          .00 {"\u2192"}
         </button>
         <button
           value="1"
@@ -94,7 +94,7 @@ export default class ButtonsComponent extends Component {
           className="operator-button"
           onClick={this.props.handleOperator}
         >
-          /
+          {"\u00F7"}
         </button>
         <button
           value="4"
@@ -126,7 +126,7 @@ export default class ButtonsComponent extends Component {
           className="operator-button"
           onClick={this.props.handleOperator}
         >
-          *
+          {"\u00D7"}
         </button>
         <button
           value="7"

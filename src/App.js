@@ -184,25 +184,28 @@ export default class App extends Component {
       this.setState({
         currentVal: "",
         formula: "",
-        answer: ""
+        answer: "",
+        trueAnswer: ""
       });
     }
   }
 
   handleNumber(e) {
-    if (this.state.power === true) {
-      let value = e.target.value;
-      if (this.state.formula === "ERROR") {
-        this.setState({
-          currentVal: value,
-          formula: value,
-          answer: ""
-        });
-      } else {
-        this.setState({
-          currentVal: this.state.currentVal + value,
-          formula: this.state.formula + value
-        });
+    if (this.state.formula.length <= 8) {
+      if (this.state.power === true) {
+        let value = e.target.value;
+        if (this.state.formula === "ERROR") {
+          this.setState({
+            currentVal: value,
+            formula: value,
+            answer: ""
+          });
+        } else {
+          this.setState({
+            currentVal: this.state.currentVal + value,
+            formula: this.state.formula + value
+          });
+        }
       }
     }
   }
