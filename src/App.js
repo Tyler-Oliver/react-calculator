@@ -15,15 +15,15 @@ export default class App extends Component {
       decimalPlaces: 2
     };
 
+    this.handlePower = this.handlePower.bind(this);
     this.handleNumber = this.handleNumber.bind(this);
     this.handleCalc = this.handleCalc.bind(this);
     this.handleOperator = this.handleOperator.bind(this);
     this.handleBackspace = this.handleBackspace.bind(this);
     this.handleClear = this.handleClear.bind(this);
-    this.handlePower = this.handlePower.bind(this);
+    this.handleSign = this.handleSign.bind(this);
     this.handleDecimal = this.handleDecimal.bind(this);
     this.handleDecimalPlaces = this.handleDecimalPlaces.bind(this);
-    this.handleSign = this.handleSign.bind(this);
   }
 
   handlePower() {
@@ -43,15 +43,149 @@ export default class App extends Component {
     }
   }
 
+  handleNumber(e) {
+    let value = e.target.value;
+    if (this.state.formula.length <= 8) {
+      if (this.state.power === true) {
+        if (this.state.formula === "ERROR") {
+          this.setState({
+            currentVal: value,
+            formula: value,
+            answer: ""
+          });
+        } else {
+          this.setState({
+            currentVal: this.state.currentVal + value,
+            formula: this.state.formula + value
+          });
+        }
+      }
+    }
+    console.log("currentVal " + this.state.currentVal);
+    console.log(this.state.formula);
+    console.log(this.state.answer);
+  }
+
+  handleCalc() {
+    let myResult = this.state.formula.replace(/[^-()\d/*+.]/g, ""); //Sanitize formula
+
+    let isValid = (str) => {
+      const stack = [];
+      let noParStr = str.replace(/[()]/g, ""); //Create a string with no parenthesis
+      if (
+        /^[^/*+]/.test(str) && //String cannot start with operator
+        /[)][\d]/.test(str) === false && //Ensure digit doesnt come directly after par
+        /[\d][(]/.test(str) === false && //Ensure digit doesn't come directly before par
+        /[(][/*+]/.test(str) === false && //A digit has to come after par
+        /[-/*+][)]/.test(str) === false && //A digit has to come before par
+        /[^-/*+]$/.test(str) && //String cannot end with operator
+        /[-*/+]{2,}/.test(str) === false && //No repeat operators
+        /^0[\d]/.test(this.state.currentVal) === false && //No octal literals
+        noParStr !== "" //Ensure no empty parenthesis
+      ) {
+        let newStr = str.replace(/[-\d/*+.]/g, ""); //Sanitize string leaving only parenthesis
+        for (let i = 0; i < newStr.length; i++) {
+          //Ensure parenthesis are valid
+          if (newStr[i] === "(") {
+            stack.push(newStr[i]);
+          } else if (stack[stack.length - 1] === "(" && newStr[i] === ")") {
+            stack.pop();
+          } else return false;
+        }
+        if (stack.length === 0) {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        return false;
+      }
+    };
+
+    // Since I am using eval() I want to only accept certain characters in the string
+    if (this.state.power === true) {
+      if (isValid(myResult)) {
+        this.setState({
+          // I am using eval() since the string is safe and trusted
+          currentVal: "",
+          formula: "",
+          answer: eval(myResult).toFixed(this.state.decimalPlaces),
+          trueAnswer: eval(myResult).toFixed(6)
+        });
+      } else {
+        this.setState({
+          currentVal: "",
+          formula: "ERROR",
+          answer: "ERROR",
+          trueAnswer: ""
+        });
+      }
+    }
+  }
+
+  handleOperator(e) {
+    let value = e.target.value;
+    if (this.state.power === true) {
+      if (
+        this.state.formula === "ERROR" ||
+        /^[0]/.test(this.state.currentVal)
+      ) {
+        //No octal literals
+        this.setState({
+          formula: "ERROR",
+          answer: "ERROR"
+        });
+      } else if (this.state.formula !== "") {
+        this.setState({
+          currentVal: "",
+          formula: this.state.formula + value
+        });
+        console.log("yeet");
+      } else {
+        this.setState({
+          formula: this.state.answer + value
+        });
+      }
+    }
+  }
+
+  handleBackspace() {
+    if (this.state.power === true) {
+      let myStr = this.state.formula.slice(0, -1);
+      this.setState({
+        formula: myStr
+      });
+    }
+  }
+
+  handleClear() {
+    if (this.state.power === true) {
+      this.setState({
+        currentVal: "",
+        formula: "",
+        answer: "",
+        trueAnswer: ""
+      });
+    }
+  }
+
   handleSign() {
     if (this.state.power === true) {
-      if (this.state.formula === "" && this.state.answer > 0) {
+      if (this.state.formula === "ERROR") {
         this.setState({
+          currentVal: "(-",
+          formula: "(-",
+          answer: ""
+        });
+      } else if (this.state.formula === "" && this.state.answer > 0) {
+        this.setState({
+          currentVal: "(-" + this.state.answer,
           formula: "(-" + this.state.answer,
           answer: ""
         });
       } else if (this.state.formula === "" && this.state.answer < 0) {
         this.setState({
+          currentVal: this.state.answer.replace("-", ""),
           formula: this.state.answer.replace("-", ""),
           answer: ""
         });
@@ -118,128 +252,6 @@ export default class App extends Component {
     }
   }
 
-  handleCalc() {
-    let myResult = this.state.formula.replace(/[^-()\d/*+.]/g, "");
-
-    let isValid = (str) => {
-      const stack = [];
-      let noParStr = str.replace(/[()]/g, ""); //Create a string with no parenthesis
-      if (
-        /^[^/*+]/.test(str) && //Ensure string doesnt start with operator
-        /[)][\d]/.test(str) === false &&
-        /[^-/*+]$/.test(noParStr) && //Ensure string doesnt end with operator
-        /[-*/+]{2,}/.test(str) === false &&
-        /^0{1}[0-9]/.test(this.state.currentVal) === false &&
-        noParStr !== "" //Ensure no empty parenthesis
-      ) {
-        //Ensure string doesnt start with an operator
-        let newStr = str.replace(/[-\d/*+.]/g, ""); //Sanitize string leaving only parenthesis
-        for (let i = 0; i < newStr.length; i++) {
-          //Ensure parenthesis are valid
-          if (newStr[i] === "(") {
-            stack.push(newStr[i]);
-          } else if (stack[stack.length - 1] === "(" && newStr[i] === ")") {
-            stack.pop();
-          } else return false;
-        }
-        if (stack.length === 0) {
-          return true;
-        } else {
-          return false;
-        }
-      } else {
-        console.log("shit");
-        console.log(/^[^/*+]/.test(str));
-        console.log(/[)][\d]/.test(str) === false);
-        console.log(/[^-/*+]$/.test(noParStr));
-        console.log(/[-*/+]{2,}/.test(str) === false);
-        console.log(/^0{1}[0-9]/.test(this.state.currentVal) === false);
-        console.log(noParStr !== "");
-        return false;
-      }
-    };
-
-    // Since I am using eval() I want to only accept certain characters in the string
-    if (this.state.power === true) {
-      if (isValid(myResult)) {
-        this.setState({
-          // I am using eval() since the string is safe and trusted
-          currentVal: "",
-          formula: "",
-          answer: eval(myResult).toFixed(this.state.decimalPlaces),
-          trueAnswer: eval(myResult).toFixed(6)
-        });
-      } else {
-        this.setState({
-          currentVal: "ERROR",
-          formula: "ERROR",
-          answer: "ERROR"
-        });
-      }
-    }
-  }
-
-  handleClear() {
-    if (this.state.power === true) {
-      this.setState({
-        currentVal: "",
-        formula: "",
-        answer: "",
-        trueAnswer: ""
-      });
-    }
-  }
-
-  handleNumber(e) {
-    if (this.state.formula.length <= 8) {
-      if (this.state.power === true) {
-        let value = e.target.value;
-        if (this.state.formula === "ERROR") {
-          this.setState({
-            currentVal: value,
-            formula: value,
-            answer: ""
-          });
-        } else {
-          this.setState({
-            currentVal: this.state.currentVal + value,
-            formula: this.state.formula + value
-          });
-        }
-      }
-    }
-  }
-
-  handleOperator(e) {
-    let value = e.target.value;
-    if (this.state.power === true) {
-      if (this.state.formula === "ERROR") {
-        this.setState({
-          formula: "ERROR",
-          answer: "ERROR"
-        });
-      } else if (this.state.formula !== "") {
-        this.setState({
-          currentVal: "",
-          formula: this.state.formula + value
-        });
-      } else {
-        this.setState({
-          formula: this.state.answer + value
-        });
-      }
-    }
-  }
-
-  handleBackspace() {
-    if (this.state.power === true) {
-      let myStr = this.state.formula.slice(0, -1);
-      this.setState({
-        formula: myStr
-      });
-    }
-  }
-
   render() {
     return (
       <div className="app">
@@ -251,8 +263,6 @@ export default class App extends Component {
             decimalPlaces={this.state.decimalPlaces}
           />
           <ButtonsComponent
-            handleDecimalPlaces={this.handleDecimalPlaces}
-            handleDecimal={this.handleDecimal}
             handlePower={this.handlePower}
             handleNumber={this.handleNumber}
             handleCalc={this.handleCalc}
@@ -260,6 +270,8 @@ export default class App extends Component {
             handleBackspace={this.handleBackspace}
             handleClear={this.handleClear}
             handleSign={this.handleSign}
+            handleDecimal={this.handleDecimal}
+            handleDecimalPlaces={this.handleDecimalPlaces}
           />
           <p id="signature">Created by Tyler Oliver</p>
         </div>
