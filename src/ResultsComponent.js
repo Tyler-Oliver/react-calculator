@@ -4,8 +4,12 @@ export default class ResultsComponent extends Component {
   render() {
     return (
       <div id="results-component">
-        <p className="calc-font">{this.props.formula}</p>
-        <p className="calc-font">{this.props.answer}</p>
+        <div className="formula">
+          <p className="calc-font">{this.props.formula}</p>
+        </div>
+        <div className="answer">
+          <p className="calc-font">{this.props.answer}</p>
+        </div>
       </div>
     );
   }

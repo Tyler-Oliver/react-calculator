@@ -65,28 +65,28 @@ export default class ButtonsComponent extends Component {
           .00 {"\u2192"}
         </button>
         <button
-          value="1"
-          id="one"
+          value="7"
+          id="seven"
           className="number-button"
           onClick={this.props.handleNumber}
         >
-          1
+          7
         </button>
         <button
-          value="2"
-          id="two"
+          value="8"
+          id="eight"
           className="number-button"
           onClick={this.props.handleNumber}
         >
-          2
+          8
         </button>
         <button
-          value="3"
-          id="three"
+          value="9"
+          id="nine"
           className="number-button"
           onClick={this.props.handleNumber}
         >
-          3
+          9
         </button>
         <button
           value="/"
@@ -129,28 +129,28 @@ export default class ButtonsComponent extends Component {
           {"\u00D7"}
         </button>
         <button
-          value="7"
-          id="seven"
+          value="1"
+          id="one"
           className="number-button"
           onClick={this.props.handleNumber}
         >
-          7
+          1
         </button>
         <button
-          value="8"
-          id="eight"
+          value="2"
+          id="two"
           className="number-button"
           onClick={this.props.handleNumber}
         >
-          8
+          2
         </button>
         <button
-          value="9"
-          id="nine"
+          value="3"
+          id="three"
           className="number-button"
           onClick={this.props.handleNumber}
         >
-          9
+          3
         </button>
         <button
           value="-"

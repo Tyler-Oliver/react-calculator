@@ -66,6 +66,20 @@ button:active {
     border-radius: 5px;
     padding: 5px;
     background-color: $base-color-1;
+
+    .formula {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 50%;
+    }
+
+    .answer {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 50%;
+    }
   }
 
   #buttons-component {
