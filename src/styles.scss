@@ -36,7 +36,6 @@ html {
 
 button {
   cursor: pointer;
-  background-color: $base-color-1;
   color: $base-color-5;
 }
 
@@ -96,6 +95,7 @@ button:active {
     }
   }
 
+/* Specific button styling */
   .equal-button {
     background-color: $base-color-2;
   }
@@ -138,6 +138,8 @@ button:active {
     margin-top: 5px;
   }
 }
+
+/* Responsive design */
 
 @media (max-width: 450px) {
   * {

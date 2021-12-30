@@ -45,7 +45,9 @@ export default class App extends Component {
 
   handleNumber(e) {
     let value = e.target.value;
-    if (this.state.formula.length <= 8) {
+    let myStr = this.state.formula.replace(/[-()/*+.]/g, ""); //Sanitize formula
+    let myStr2 = this.state.formula.replace(/[^()]/g, "");
+    if (myStr.length <= 8 && myStr2.length <= 16) {
       if (this.state.power === true) {
         if (this.state.formula === "ERROR") {
           this.setState({
@@ -61,9 +63,6 @@ export default class App extends Component {
         }
       }
     }
-    console.log("currentVal " + this.state.currentVal);
-    console.log(this.state.formula);
-    console.log(this.state.answer);
   }
 
   handleCalc() {
@@ -79,7 +78,6 @@ export default class App extends Component {
         /[(][/*+]/.test(str) === false && //A digit has to come after par
         /[-/*+][)]/.test(str) === false && //A digit has to come before par
         /[^-/*+]$/.test(str) && //String cannot end with operator
-        /[-*/+]{2,}/.test(str) === false && //No repeat operators
         /^0[\d]/.test(this.state.currentVal) === false && //No octal literals
         noParStr !== "" //Ensure no empty parenthesis
       ) {
@@ -126,25 +124,26 @@ export default class App extends Component {
   handleOperator(e) {
     let value = e.target.value;
     if (this.state.power === true) {
-      if (
-        this.state.formula === "ERROR" ||
-        /^[0]/.test(this.state.currentVal)
-      ) {
-        //No octal literals
-        this.setState({
-          formula: "ERROR",
-          answer: "ERROR"
-        });
-      } else if (this.state.formula !== "") {
-        this.setState({
-          currentVal: "",
-          formula: this.state.formula + value
-        });
-        console.log("yeet");
-      } else {
-        this.setState({
-          formula: this.state.answer + value
-        });
+      if (/[-/*+]$/.test(this.state.formula) === false) {
+        if (
+          this.state.formula === "ERROR" ||
+          /^[0]/.test(this.state.currentVal)
+        ) {
+          //No octal literals
+          this.setState({
+            formula: "ERROR",
+            answer: "ERROR"
+          });
+        } else if (this.state.formula !== "") {
+          this.setState({
+            currentVal: "",
+            formula: this.state.formula + value
+          });
+        } else {
+          this.setState({
+            formula: this.state.answer + value
+          });
+        }
       }
     }
   }
@@ -177,25 +176,29 @@ export default class App extends Component {
           formula: "(-",
           answer: ""
         });
+        console.log("1");
       } else if (this.state.formula === "" && this.state.answer > 0) {
         this.setState({
           currentVal: "(-" + this.state.answer,
           formula: "(-" + this.state.answer,
           answer: ""
         });
+        console.log("2");
       } else if (this.state.formula === "" && this.state.answer < 0) {
         this.setState({
           currentVal: this.state.answer.replace("-", ""),
           formula: this.state.answer.replace("-", ""),
           answer: ""
         });
-      } else if (/^[(][-]/.test(this.state.currentVal)) {
+        console.log("3");
+      } else if (/(?<=[(])[-]/.test(this.state.currentVal)) {
         this.setState({
           currentVal: this.state.currentVal.replace(/^[(][-]/, ""),
           formula:
             this.state.formula.replace(this.state.currentVal, "") +
             this.state.currentVal.replace(/^[(][-]/, "")
         });
+        console.log("4");
       } else {
         this.setState({
           currentVal: "(-" + this.state.currentVal,
@@ -204,6 +207,7 @@ export default class App extends Component {
             "(-" +
             this.state.currentVal
         });
+        console.log("5");
       }
     }
   }
