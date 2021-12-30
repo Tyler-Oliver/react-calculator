@@ -1,6 +1,3 @@
-# javascript-calculator
+# react-calculator
 
-Created with CodeSandbox
-
-Some things i still need to do
-\*some issues with the handleSign?
+A calculator I created using React.
