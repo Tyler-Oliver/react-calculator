@@ -207,6 +207,7 @@ export default class App extends Component {
             "(-" +
             this.state.currentVal
         });
+        //I think there is an issue here
         console.log("5");
       }
     }
